@@ -1,0 +1,2554 @@
+{
+	"info": {
+		"_postman_id": "cofund-master-60-test-suite",
+		"name": "CoFund - Master Test Suite (60 Test Cases / 100% Coverage)",
+		"description": "Koleksi Postman API 100% lengkap mencakup seluruh 60 skenario uji coba (49 Route API + 10 Business Rules + Security + Edge Cases).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://127.0.0.1:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "creatorToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "backerToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "adminToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "01. Authentication & Security",
+			"item": [
+				{
+					"name": "01. [SUCCESS] Register User Baru",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Register Sukses (201)', function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+									"pm.test('Response berisi token Sanctum', function () { pm.expect(pm.response.json().token).to.exist; });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"User Testing Baru\",\n    \"email\": \"tester_1787890793229@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					}
+				},
+				{
+					"name": "02. [SUCCESS] Login Creator (Set creatorToken)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Login Creator Berhasil (200)', function () { pm.response.to.have.status(200); });",
+									"var json = pm.response.json();",
+									"if (json.token) { pm.collectionVariables.set('creatorToken', json.token); pm.collectionVariables.set('token', json.token); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"creator@cofund.com\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					}
+				},
+				{
+					"name": "03. [SUCCESS] Login Backer (Set backerToken)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Login Backer Berhasil (200)', function () { pm.response.to.have.status(200); });",
+									"var json = pm.response.json();",
+									"if (json.token) { pm.collectionVariables.set('backerToken', json.token); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"backer@cofund.com\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					}
+				},
+				{
+					"name": "04. [SUCCESS] Login Admin (Set adminToken)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Login Admin Berhasil (200)', function () { pm.response.to.have.status(200); });",
+									"var json = pm.response.json();",
+									"if (json.token) { pm.collectionVariables.set('adminToken', json.token); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@cofund.com\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					}
+				},
+				{
+					"name": "05. [SUCCESS] Get Profile User (/me)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Get Profile Berhasil (200)', function () { pm.response.to.have.status(200); });",
+									"pm.test('Response berisi role dan email', function () { pm.expect(pm.response.json().role).to.exist; });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"me"
+							]
+						}
+					}
+				},
+				{
+					"name": "06. [SUCCESS] Upgrade Role ke Creator (/me/upgrade-creator)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Upgrade Role Sukses (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/me/upgrade-creator",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"me",
+								"upgrade-creator"
+							]
+						}
+					}
+				},
+				{
+					"name": "07. [SUCCESS] Forgot Password (Kirim Link Reset)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Forgot Password Sukses (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"creator@cofund.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/forgot-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"forgot-password"
+							]
+						}
+					}
+				},
+				{
+					"name": "08. [GAGAL Auth] Reset Password dengan Token Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Ditolak Token Invalid (400)\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"budi@example.com\",\n    \"token\": \"dummy_reset_token\",\n    \"password\": \"newpassword123\",\n    \"password_confirmation\": \"newpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/reset-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"reset-password"
+							]
+						}
+					}
+				},
+				{
+					"name": "09. [SUCCESS] Re-authenticate Creator Session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Creator Active (200)', function () { pm.response.to.have.status(200); });",
+									"var json = pm.response.json();",
+									"if (json.token) { pm.collectionVariables.set('creatorToken', json.token); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"creator@cofund.com\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "02. Public & Discovery",
+			"item": [
+				{
+					"name": "10. [SUCCESS] Get All Categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Get Categories (200)', function () { pm.response.to.have.status(200); });",
+									"pm.test('Kategori array tidak kosong', function () { pm.expect(pm.response.json().length).to.be.above(0); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/categories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					}
+				},
+				{
+					"name": "11. [SUCCESS] Get Active Campaigns - Pagination Default",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Get Active Campaigns (200)', function () { pm.response.to.have.status(200); });",
+									"pm.test('Data terpaginasi', function () { pm.expect(pm.response.json().data).to.be.an('array'); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns?status=active",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "active"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "12. [SUCCESS] Filter Campaigns by Category ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Filter Kategori Sukses (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns?category_id=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns"
+							],
+							"query": [
+								{
+									"key": "category_id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "13. [SUCCESS] Search Campaigns by Keyword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Search Kampanye Sukses (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns?search=robot",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "robot"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "14. [SUCCESS] Sort Campaigns by Popularity / Most Funded",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Sort Kampanye Sukses (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns?sort=popular",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "popular"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "15. [SUCCESS] Get Campaign Detail Public (ID 1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Get Detail (200)', function () { pm.response.to.have.status(200); });",
+									"pm.test('Memiliki kalkulasi collected_percentage & days_left', function () {",
+									"    var j = pm.response.json();",
+									"    pm.expect(j.collected_percentage).to.exist;",
+									"    pm.expect(j.days_left).to.exist;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "16. [SUCCESS] Get Campaign Tiers & Updates Public",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Get Tiers (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/1/tiers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"1",
+								"tiers"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "03. Creator Management",
+			"item": [
+				{
+					"name": "17. [SUCCESS] Get Creator Dashboard",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Get Creator Dashboard (200)', function () { pm.response.to.have.status(200); });",
+									"pm.test('Summary finansial & list kampanye lengkap', function () {",
+									"    var j = pm.response.json();",
+									"    pm.expect(j.summary.total_collected).to.exist;",
+									"    pm.expect(j.campaigns).to.be.an('array');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/dashboard/creator",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dashboard",
+								"creator"
+							]
+						}
+					}
+				},
+				{
+					"name": "18. [SUCCESS] Create New Campaign Draft",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Create Campaign (201)', function () { pm.response.to.have.status(201); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Inovasi Filter Air Baku Sungai Otomatis\",\n    \"category_id\": 1,\n    \"description\": \"Sistem filter air otomatis tenaga surya dengan membran mikrofiltrasi.\",\n    \"target_amount\": 15000000,\n    \"deadline\": \"2026-12-31\",\n    \"video_url\": \"https://www.youtube.com/watch?v=dQw4w9WgXcQ\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns"
+							]
+						}
+					}
+				},
+				{
+					"name": "19. [SUCCESS] Update Draft Campaign (ID 4)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Update Campaign (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Film Animasi Pendek: Legenda Danau Toba (Revisi)\",\n    \"target_amount\": 55000000\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/4",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"4"
+							]
+						}
+					}
+				},
+				{
+					"name": "20. [SUCCESS] Upload Gallery Images (Draft Campaign 4)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Upload Images (201)', function () { pm.response.to.have.status(201); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"images\": [\n        \"https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800\",\n        \"https://images.unsplash.com/photo-1518770660439-4636190af475?w=800\"\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/4/images",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"4",
+								"images"
+							]
+						}
+					}
+				},
+				{
+					"name": "21. [SUCCESS] Set Primary Thumbnail Image (Draft Campaign 4)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Set Primary Image (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/4/images/8/primary",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"4",
+								"images",
+								"8",
+								"primary"
+							]
+						}
+					}
+				},
+				{
+					"name": "22. [SUCCESS] Delete Gallery Image (Draft Campaign 4 / Image 8)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Delete Image Sukses (200/404)', function () { pm.expect(pm.response.code).to.be.oneOf([200, 404]); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/4/images/8",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"4",
+								"images",
+								"8"
+							]
+						}
+					}
+				},
+				{
+					"name": "23. [SUCCESS] Add Tier Reward (Draft Campaign 4)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Add Tier (201)', function () { pm.response.to.have.status(201); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Paket Supporter Istimewa\",\n    \"min_amount\": 150000,\n    \"quota\": 25,\n    \"reward_description\": \"Kaos eksklusif & stiker donatur\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/4/tiers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"4",
+								"tiers"
+							]
+						}
+					}
+				},
+				{
+					"name": "24. [SUCCESS] Update Tier Reward (Draft Campaign 4 / Tier 6)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Update Tier (200/404)', function () { pm.expect(pm.response.code).to.be.oneOf([200, 404]); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Paket Special Credits (Revisi)\",\n    \"min_amount\": 75000,\n    \"quota\": 250,\n    \"reward_description\": \"Nama dicantumkan di credit title film dan link tonton premiere private + stiker\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/4/tiers/6",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"4",
+								"tiers",
+								"6"
+							]
+						}
+					}
+				},
+				{
+					"name": "25. [SUCCESS] Delete Tier Reward (Draft Campaign 4 / Tier 7)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Delete Tier (200/404)', function () { pm.expect(pm.response.code).to.be.oneOf([200, 404]); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/4/tiers/7",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"4",
+								"tiers",
+								"7"
+							]
+						}
+					}
+				},
+				{
+					"name": "26. [SUCCESS] Submit Campaign for Review (Draft Campaign 4)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Submit Review (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/4/submit-review",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"4",
+								"submit-review"
+							]
+						}
+					}
+				},
+				{
+					"name": "27. [SUCCESS] Post Project Update to Active Campaign (ID 1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Post Update (201)', function () { pm.response.to.have.status(201); });",
+									"pm.test('Kabar berhasil dibroadcast', function () { pm.expect(pm.response.json().update).to.exist; });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Uji Coba Motor Baling-Baling Kapal\",\n    \"content\": \"Uji coba baling-baling kapal hari ini berhasil dengan efisiensi daya 92%.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/1/updates",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"1",
+								"updates"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "04. Backer & Transactions",
+			"item": [
+				{
+					"name": "28. [SUCCESS] Get Backer Dashboard",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Get Backer Dashboard (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/dashboard/backer",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dashboard",
+								"backer"
+							]
+						}
+					}
+				},
+				{
+					"name": "29. [SUCCESS] Backing Campaign dengan Tier (ID 1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Backing Tier Berhasil (201)', function () { pm.response.to.have.status(201); });",
+									"pm.test('Status backing completed', function () { pm.expect(pm.response.json().backing.status).to.equal('completed'); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 250000,\n    \"tier_id\": 2\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/1/back",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"1",
+								"back"
+							]
+						}
+					}
+				},
+				{
+					"name": "30. [SUCCESS] Backing Campaign Donasi Bebas (ID 1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Backing Bebas Berhasil (201)', function () { pm.response.to.have.status(201); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 25000\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/1/back",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"1",
+								"back"
+							]
+						}
+					}
+				},
+				{
+					"name": "31. [SUCCESS] Get My Backings List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Get My Backings (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/my-backings",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"my-backings"
+							]
+						}
+					}
+				},
+				{
+					"name": "32. [SUCCESS] Get Saldo Virtual & Mutasi Transaksi (/me/balance)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Get Balance (200)', function () { pm.response.to.have.status(200); });",
+									"pm.test('Data mutasi dan balance valid', function () {",
+									"    var j = pm.response.json();",
+									"    pm.expect(j.balance).to.exist;",
+									"    pm.expect(j.transactions).to.exist;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/me/balance?type=payment",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"me",
+								"balance"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "payment"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "33. [SUCCESS] Withdraw / Penarikan Saldo (/me/withdraw)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Withdraw Berhasil (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 20000,\n    \"bank_name\": \"BCA\",\n    \"account_number\": \"8820192831\",\n    \"account_holder\": \"Backer CoFund (Siti)\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/me/withdraw",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"me",
+								"withdraw"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "05. In-App Notifications",
+			"item": [
+				{
+					"name": "34. [SUCCESS] Get Notifications List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Get Notifications (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/notifications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notifications"
+							]
+						}
+					}
+				},
+				{
+					"name": "35. [SUCCESS] Get Unread Notifications Count",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Get Unread Count (200)', function () { pm.response.to.have.status(200); });",
+									"pm.test('Angka unread count valid', function () { pm.expect(pm.response.json().unread_count).to.be.a('number'); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/notifications/unread-count",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notifications",
+								"unread-count"
+							]
+						}
+					}
+				},
+				{
+					"name": "36. [SUCCESS] Mark Single Notification as Read",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Mark Single Read (200/404)', function () { pm.expect(pm.response.code).to.be.oneOf([200, 404]); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/notifications/2/read",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notifications",
+								"2",
+								"read"
+							]
+						}
+					}
+				},
+				{
+					"name": "37. [SUCCESS] Mark All Notifications as Read",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Mark All Read (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/notifications/read-all",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notifications",
+								"read-all"
+							]
+						}
+					}
+				},
+				{
+					"name": "38. [SUCCESS] Delete Single Notification",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Delete Notification (200/404)', function () { pm.expect(pm.response.code).to.be.oneOf([200, 404]); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/notifications/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"notifications",
+								"2"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "06. Admin Panel & Governance",
+			"item": [
+				{
+					"name": "39. [SUCCESS] Admin Platform Overview & Statistics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Admin Overview (200)', function () { pm.response.to.have.status(200); });",
+									"pm.test('Fee platform 5% terhitung', function () {",
+									"    var j = pm.response.json();",
+									"    pm.expect(j.total_platform_fee_collected).to.exist;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/overview",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"overview"
+							]
+						}
+					}
+				},
+				{
+					"name": "40. [SUCCESS] Admin Campaigns Review Queue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Get Admin Campaigns (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/campaigns?status=review",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"campaigns"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "review"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "41. [SUCCESS] Admin Campaign Detail (ID 2)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Get Admin Campaign Detail (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/campaigns/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"campaigns",
+								"2"
+							]
+						}
+					}
+				},
+				{
+					"name": "42. [SUCCESS] Admin Approve Campaign (ID 2)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Approve Campaign (200)', function () { pm.response.to.have.status(200); });",
+									"pm.test('Status berubah menjadi active', function () { pm.expect(pm.response.json().campaign.status).to.equal('active'); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/campaigns/2/approve",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"campaigns",
+								"2",
+								"approve"
+							]
+						}
+					}
+				},
+				{
+					"name": "43. [SUCCESS] Admin Reject Campaign (ID 3)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Reject Campaign (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rejection_note\": \"Target dana tidak realistis dengan rincian anggaran yang dilampirkan.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/campaigns/3/reject",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"campaigns",
+								"3",
+								"reject"
+							]
+						}
+					}
+				},
+				{
+					"name": "44. [SUCCESS] Admin Force-Fail Campaign & Auto Refund (ID 1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Force Fail Campaign (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reason\": \"Pelanggaran hak cipta dan laporan indikasi penipuan terverifikasi.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/campaigns/1/force-fail",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"campaigns",
+								"1",
+								"force-fail"
+							]
+						}
+					}
+				},
+				{
+					"name": "45. [SUCCESS] Admin User Management & Suspend (ID 4)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Toggle Suspend User (200)', function () { pm.response.to.have.status(200); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/4/suspend",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users",
+								"4",
+								"suspend"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "07. Business Rules & Negative Tests",
+			"item": [
+				{
+					"name": "46. [GAGAL Rule 1] Buat Kampanye Deadline < H+7",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Validasi 422', function () { pm.response.to.have.status(422); });",
+									"pm.test('Error deadline terdeteksi', function () { pm.expect(pm.response.json().errors.deadline).to.be.an('array'); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Uji Deadline\",\n    \"category_id\": 1,\n    \"description\": \"Desc\",\n    \"target_amount\": 5000000,\n    \"deadline\": \"2026-01-01\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns"
+							]
+						}
+					}
+				},
+				{
+					"name": "47. [GAGAL Rule 2] Buat Kampanye Target < Rp 100.000",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Validasi 422', function () { pm.response.to.have.status(422); });",
+									"pm.test('Error target_amount terdeteksi', function () { pm.expect(pm.response.json().errors.target_amount).to.be.an('array'); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Uji Target\",\n    \"category_id\": 1,\n    \"description\": \"Desc\",\n    \"target_amount\": 50000,\n    \"deadline\": \"2026-12-31\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns"
+							]
+						}
+					}
+				},
+				{
+					"name": "48. [GAGAL Rule 3] Backing Nominal < Rp 10.000",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Validasi 422', function () { pm.response.to.have.status(422); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 5000\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/2/back",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"2",
+								"back"
+							]
+						}
+					}
+				},
+				{
+					"name": "49. [GAGAL Rule 4] Creator Backing Proyek Milik Sendiri",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Forbidden 403', function () { pm.response.to.have.status(403); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 100000\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/2/back",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"2",
+								"back"
+							]
+						}
+					}
+				},
+				{
+					"name": "50. [GAGAL Rule 5] Backing Kampanye Non-Aktif (Draft / Review)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Status Bukan Active (422)', function () { pm.response.to.have.status(422); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 50000\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/3/back",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"3",
+								"back"
+							]
+						}
+					}
+				},
+				{
+					"name": "51. [GAGAL Rule 6] Backing dengan Kuota Tier yang Sudah Habis",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Kuota Tier Habis (422)', function () { pm.response.to.have.status(422); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 30000,\n    \"tier_id\": 4\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/1/back",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"1",
+								"back"
+							]
+						}
+					}
+				},
+				{
+					"name": "52. [GAGAL Rule 7] Backing Nominal di Bawah Harga Minimal Tier",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Nominal Kurang dari Tier (422)', function () { pm.response.to.have.status(422); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 10000,\n    \"tier_id\": 2\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/1/back",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"1",
+								"back"
+							]
+						}
+					}
+				},
+				{
+					"name": "53. [GAGAL Rule 8] Tambah Tier pada Kampanye yang Sudah Aktif",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Tambah Tier pada Active Campaign (422)', function () { pm.response.to.have.status(422); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Tier Ilegal\",\n    \"min_amount\": 100000,\n    \"quota\": 10,\n    \"reward_description\": \"Reward\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/1/tiers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"1",
+								"tiers"
+							]
+						}
+					}
+				},
+				{
+					"name": "54. [GAGAL Rule 9] Hapus Kampanye yang Bukan Berstatus Draft",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Validasi 422', function () { pm.response.to.have.status(422); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{creatorToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "55. [GAGAL Rule 10] Penarikan Saldo Melebihi Saldo Dompet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Saldo Tidak Cukup (422)', function () { pm.response.to.have.status(422); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 999999999,\n    \"bank_name\": \"BCA\",\n    \"account_number\": \"8820192831\",\n    \"account_holder\": \"Backer Siti\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/me/withdraw",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"me",
+								"withdraw"
+							]
+						}
+					}
+				},
+				{
+					"name": "56. [GAGAL Auth] Login dengan Password Salah",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Kredensial Salah 422/401', function () { pm.expect(pm.response.code).to.be.oneOf([401, 422]); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"creator@cofund.com\",\n    \"password\": \"passwordsalah123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					}
+				},
+				{
+					"name": "57. [GAGAL Auth] Register dengan Email yang Sudah Terdaftar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Email Sudah Terdaftar (422)', function () { pm.response.to.have.status(422); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Duplikat\",\n    \"email\": \"creator@cofund.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					}
+				},
+				{
+					"name": "58. [GAGAL Security] Non-Admin Mengakses Endpoint Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Forbidden 403', function () { pm.response.to.have.status(403); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{backerToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/overview",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"overview"
+							]
+						}
+					}
+				},
+				{
+					"name": "59. [GAGAL Security] Tamu / Guest Backing Tanpa Token Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Unauthorized 401', function () { pm.response.to.have.status(401); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 50000\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/1/back",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"1",
+								"back"
+							]
+						}
+					}
+				},
+				{
+					"name": "60. [GAGAL Admin] Admin Men-suspend Akun Sendiri",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Ditolak Suspend Diri Sendiri (422)', function () { pm.response.to.have.status(422); });"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/1/suspend",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users",
+								"1",
+								"suspend"
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}

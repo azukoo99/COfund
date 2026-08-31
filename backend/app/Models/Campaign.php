@@ -39,6 +39,11 @@ class Campaign extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
@@ -67,6 +72,17 @@ class Campaign extends Model
     public function backings(): HasMany
     {
         return $this->hasMany(Backing::class);
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        if ($field) {
+            return parent::resolveRouteBinding($value, $field);
+        }
+
+        return is_numeric($value)
+            ? $this->where('id', $value)->firstOrFail()
+            : $this->where('slug', $value)->firstOrFail();
     }
 
     public function getRouteKeyName(): string

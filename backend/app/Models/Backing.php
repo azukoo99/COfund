@@ -28,6 +28,11 @@ class Backing extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function campaign(): BelongsTo
     {
         return $this->belongsTo(Campaign::class);

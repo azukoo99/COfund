@@ -21,6 +21,12 @@ class LoginController extends Controller
             ]);
         }
 
+        if ($user->is_suspended) {
+            return response()->json([
+                'message' => 'Akun Anda sedang ditangguhkan (suspend). Silakan hubungi administrator.',
+            ], 403);
+        }
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -42,5 +48,24 @@ class LoginController extends Controller
     public function me(Request $request)
     {
         return response()->json($request->user());
+    }
+
+    public function upgradeToCreator(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user->role === 'creator') {
+            return response()->json([
+                'message' => 'Akun Anda sudah memiliki role creator.',
+                'user' => $user,
+            ]);
+        }
+
+        $user->update(['role' => 'creator']);
+
+        return response()->json([
+            'message' => 'Selamat! Akun Anda berhasil di-upgrade menjadi creator.',
+            'user' => $user,
+        ]);
     }
 }
